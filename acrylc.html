@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>높은퀄리티를 찾아주셔서 감사합니다</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; 
+            padding: 0;
+            background: #f9fafc;
+        }
+
+        header {
+            background: #007BFF;
+            color: white;
+            padding: 15px 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .container:before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            background-image: url('https://via.placeholder.com/100?text=Acrylic');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+
+        h1, h2 {
+            margin-top: 0;
+        }
+
+        .calculator, .form-container {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .calculator img {
+            width: 80%; 
+            max-width: 400px;
+            height: auto; 
+            display: block; 
+            margin: 0 auto 20px auto; 
+        }
+
+        .input-group {
+            margin-bottom: 20px; 
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .addon-options {
+            margin-bottom: 20px; 
+        }
+        .addon-options label {
+            display: block;
+            margin: 5px 0;
+            font-weight: normal;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #price {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container label {
+            margin: 15px 0 5px 0;
+            font-weight: bold;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-container textarea {
+            height: 120px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>높은퀄리티 자동계산기</header>
+    <div class="container">
+        <div class="calculator">
+            <h1>아크릴 가격 계산</h1>
+            <img src="https://postfiles.pstatic.net/MjAyNDAzMTFfMTY1/MDAxNzEwMTM3MDU4NjQ1.0aiEM15Gc9uVZtcNuyTj1WI5DWroiMIKIYt_MhMXxt8g.tT57wPu2KoAWCuzZKZ-7UV80KJey-zqikTim-OTG0fAg.PNG/%ED%99%94%EC%9D%B4%ED%8A%B8_%EC%84%B8%EB%A1%9C.png?type=w773" alt="아크릴 이미지">
+            <div class="input-group">
+                <label for="color">색상 선택:</label>
+                <select id="color" onchange="updateThicknessOptions(); calculatePrice();">
+                    <option value="12350">투명</option>
+                    <option value="13500">백색</option>
+                    <option value="13500">검정</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="thickness">두께(mm):</label>
+                <select id="thickness" onchange="calculatePrice()">
+                    <!-- 초기값(투명) 기준 모든 두께 표시 -->
+                    <option value="2">2mm</option>
+                    <option value="3">3mm</option>
+                    <option value="5">5mm</option>
+                    <option value="8">8mm</option>
+                    <option value="10">10mm</option>
+                    <option value="15">15mm</option>
+                    <option value="20">20mm</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="width">가로(mm):</label>
+                <input type="number" id="width" placeholder="예: 900" min="10" max="1200" oninput="calculatePrice()">
+            </div>
+            <div class="input-group">
+                <label for="height">세로(mm):</label>
+                <input type="number" id="height" placeholder="예: 900" min="10" max="1200" oninput="calculatePrice()">
+            </div>
+            
+            <div class="addon-options">
+                <strong>추가가공 옵션:</strong>
+                <label><input type="checkbox" class="addon-checkbox" id="hole" value="구멍가공" data-cost="0" onchange="calculatePrice()"> 구멍가공(무료)</label>
+                <label><input type="checkbox" class="addon-checkbox" id="roundEdge" value="모서리라운드" data-cost="0" onchange="calculatePrice()"> 모서리라운드(무료)</label>
+                <label><input type="checkbox" class="addon-checkbox" id="angle45" value="테두리45도" data-cost="1000" onchange="calculatePrice()"> 테두리45도(1000원/3T이하 불가)</label>
+                <label><input type="checkbox" class="addon-checkbox" id="bulkwang" value="불광" data-cost="2000" onchange="calculatePrice()"> 불광(2000원)</label>
+                <label><input type="checkbox" class="addon-checkbox" id="laser" value="레이저가공" onchange="toggleLaser(); calculatePrice()"> 레이저가공(크기에따라 가격변동)</label>
+            </div>
+            
+            <div class="input-group">
+                <label for="quantity">수량:</label>
+                <input type="number" id="quantity" placeholder="예: 1" min="1" value="1" oninput="calculatePrice()">
+            </div>
+
+            <button onclick="calculatePrice()">가격 계산</button>
+            <div id="price">가격: 0 원</div>
+        </div>
+
+        <div class="form-container">
+            <h2>견적 요청</h2>
+            <form id="orderForm">
+                <label for="customerName">주문자 성함:</label>
+                <input type="text" id="customerName" name="customerName" required>
+
+                <label for="contactNumber">연락처:</label>
+                <input type="text" id="contactNumber" name="contactNumber" required>
+
+                <label for="orderDetails">주문 내역:</label>
+                <textarea id="orderDetails" name="orderDetails" readonly></textarea>
+
+                <label for="email">견적 받으실 이메일(고객님 이메일):</label>
+                <input type="email" id="email" name="email" required>
+
+                <button type="submit">견적 요청</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        emailjs.init("vcCEJ9XDIDoBSMVAW"); // 본인의 EmailJS Public Key로 변경
+
+        let pricePerKg = 12350; 
+        let lastCalculatedPrice = 0; 
+        let lastCalculatedDetails = ""; 
+
+        const others = ['hole', 'roundEdge', 'angle45', 'bulkwang'];
+
+        const thicknessOptions = {
+            transparent: [2,3,5,8,10,15,20],
+            white: [2,3,5,8,10],
+            black: [2,3,5,8,10]
+        };
+
+        function updateThicknessOptions() {
+            const colorVal = document.getElementById('color').value;
+            let allowedThickness;
+            if (colorVal === "12350") {
+                allowedThickness = thicknessOptions.transparent;
+            } else {
+                // 백색/검정
+                allowedThickness = thicknessOptions.white; 
+            }
+            
+            const thicknessSelect = document.getElementById('thickness');
+            thicknessSelect.innerHTML = "";
+            allowedThickness.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.textContent = t + "mm";
+                thicknessSelect.appendChild(opt);
+            });
+        }
+
+        function toggleLaser() {
+            const laserChecked = document.getElementById('laser').checked;
+            others.forEach(id => {
+                const el = document.getElementById(id);
+                if (id !== 'angle45') { 
+                    if (laserChecked) {
+                        el.checked = false;
+                        el.disabled = true;
+                    } else {
+                        el.disabled = false;
+                    }
+                }
+            });
+        }
+
+        function calculatePrice() {
+            const color = document.getElementById("color").value;
+            pricePerKg = parseInt(color);
+
+            const density = 1.2;
+            const widthVal = parseFloat(document.getElementById("width").value) || 0;
+            const heightVal = parseFloat(document.getElementById("height").value) || 0;
+            const thicknessVal = parseFloat(document.getElementById("thickness").value);
+            const quantityVal = parseInt(document.getElementById("quantity").value, 10) || 0;
+
+            // 2T, 3T일 때 angle45 비활성화 처리
+            const angle45Checkbox = document.getElementById('angle45');
+            if (thicknessVal === 2 || thicknessVal === 3) {
+                angle45Checkbox.checked = false;
+                angle45Checkbox.disabled = true;
+            } else {
+                // 다시 활성화 (레이저가공 미선택 시)
+                if (!document.getElementById('laser').checked) {
+                    angle45Checkbox.disabled = false;
+                }
+            }
+
+            if (widthVal <= 0 || heightVal <= 0 || thicknessVal <= 0 || quantityVal <= 0) {
+                document.getElementById("price").innerHTML = "가격: 유효하지 않은 입력값입니다.";
+                document.getElementById("orderDetails").value = "";
+                return;
+            }
+
+            const widthCm = widthVal / 10;
+            const heightCm = heightVal / 10;
+            const thicknessCm = thicknessVal / 10;
+
+            const volume = widthCm * heightCm * thicknessCm;
+            const weight = (volume * density) / 1000;
+
+            const pricePerUnit = Math.ceil((weight * pricePerKg) / 500) * 500;
+            const panelTotalPrice = pricePerUnit * quantityVal; // 판재 기본가격
+
+            const isLaser = document.getElementById('laser').checked;
+            const angle45 = document.getElementById('angle45').checked;
+            const bulkwang = document.getElementById('bulkwang').checked;
+            const hole = document.getElementById('hole').checked;
+            const roundEdge = document.getElementById('roundEdge').checked;
+
+            let addonPrice = 0;
+            let addonDetails = [];
+
+            if (isLaser) {
+                let halfPrice = panelTotalPrice / 2;
+                halfPrice = Math.ceil(halfPrice / 500) * 500;
+                addonPrice = halfPrice;
+                addonDetails.push("레이저가공");
+            } else {
+                if (angle45) {
+                    addonPrice += (1000 * quantityVal);
+                    addonDetails.push("테두리45도(+1000원/판)");
+                }
+                if (bulkwang) {
+                    addonPrice += (2000 * quantityVal);
+                    addonDetails.push("불광(+2000원/판)");
+                }
+                if (hole) {
+                    addonDetails.push("구멍가공(무료)");
+                }
+                if (roundEdge) {
+                    addonDetails.push("모서리라운드(무료)");
+                }
+            }
+
+            const totalPrice = panelTotalPrice + addonPrice;
+
+            document.getElementById("price").innerHTML = "가격: 약 " + totalPrice.toLocaleString() + " 원";
+            lastCalculatedPrice = totalPrice;
+
+            const colorText = (pricePerKg === 12350) ? "투명" : "백색/검정";
+            const thicknessText = thicknessVal + "mm";
+
+            let details = 
+                "색상: " + colorText + "\n" +
+                "두께: " + thicknessText + "\n" +
+                "가로: " + widthVal + "mm, 세로: " + heightVal + "mm\n" +
+                "수량: " + quantityVal + "개\n";
+
+            if (addonDetails.length > 0) {
+                details += "추가가공: " + addonDetails.join(", ") + "\n";
+            } else {
+                details += "추가가공: 없음\n";
+            }
+
+            details += "총 가격: 약 " + totalPrice.toLocaleString() + " 원";
+
+            document.getElementById("orderDetails").value = details;
+            lastCalculatedDetails = details;
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const templateParams = {
+                customerName: document.getElementById('customerName').value,
+                contactNumber: document.getElementById('contactNumber').value,
+                orderDetails: document.getElementById('orderDetails').value,
+                to_email: document.getElementById('email').value
+            };
+
+            emailjs.send('service_acrylworld', 'template_nienojr', templateParams)
+            .then(function(response) {
+                alert('견적 요청이 전송되었습니다! 고객님 이메일로 견적서가 발송됩니다.');
+            }, function(error) {
+                alert('메일 전송 실패: ' + JSON.stringify(error));
+            });
+        });
+
+        // 초기화
+        updateThicknessOptions();
+        calculatePrice();
+    </script>
+</body>
+</html>
